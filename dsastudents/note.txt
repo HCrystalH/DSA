@@ -1,1 +1,2 @@
-use "g++ main.cpp -I include" to run 
+1. use "g++ main.cpp -I include" to run 
+2. include is the working folder
