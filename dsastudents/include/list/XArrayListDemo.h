@@ -25,6 +25,7 @@ void xlistDemo1(){
         iList.add(i, i*i);
     
     //iList.dump();
+    
     for(XArrayList<int>::Iterator it=iList.begin(); it != iList.end(); it++ )
         cout << *it << ", found at: " << iList.indexOf(*it) << endl;
     cout << endl;

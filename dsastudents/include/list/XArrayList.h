@@ -394,6 +394,7 @@ string XArrayList<T>::toString(string (*item2str)(T &))
 
     // TODO
     stringstream ss;
+    // [1, 2, 9, 16]
     ss << "[";
     for(int i=0; i<count-1;i++){
         if(item2str != 0) ss << item2str(data[i]) << ", ";
@@ -419,7 +420,7 @@ void XArrayList<T>::checkIndex(int index)
      * Ensures safe access to the list's elements by preventing invalid index operations.
      */
     // TODO
-    if((index < 0) || (index >= count)){
+    if((index < 0) || (index > count)){
         throw std::out_of_range("Index is out of range!");
     }
 }
@@ -433,20 +434,23 @@ void XArrayList<T>::ensureCapacity(int index)
      * In case of memory allocation failure, catches std::bad_alloc.
      */
     // TODO
-    if( (index < 0) ||( index > count ) ){
-        throw std::out_of_range("Index is out of range!");
-    }
-
+    // if( (index < 0) ||( index > count ) ){
+    //     throw std::out_of_range("Index is out of range!");
+    // }
+    checkIndex(index);
     if(index >= capacity){
         // Reallocate
         int oldCapacity = this->capacity;
-        this->capacity = oldCapacity + (oldCapacity >>1);
+        this->capacity = oldCapacity + (oldCapacity/2);
         try{
+            // copy old elements in list to new list with higher capacity
             T* newData = new T[capacity];
             memcpy(newData, data,oldCapacity*sizeof(T));
             delete[] data;
             data = newData;
         }catch(std::bad_alloc e){
+            // bad allocated
+            // cout << e;
             e.what();
         }
     }
