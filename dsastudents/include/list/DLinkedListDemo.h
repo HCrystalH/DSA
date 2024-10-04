@@ -71,7 +71,7 @@ void dlistDemo3(){
     dList.add(Point(1.6, 3.1));
     
     cout << "test for indexOf: " << endl;
-    Point p(1.6, 3.1);
+    Point p(2.5, 4.5);
     cout << p << " at: " << dList.indexOf(p);
 }
 bool pointComparator(Point*& p1, Point*& p2){
@@ -102,6 +102,7 @@ void dlistDemo5(){
     dList.add(5.5);
     dList.println();
     cout << "index of 5.5: " << dList.indexOf(5.5) << endl;
+    cout << "index of 3.2: " << dList.indexOf(3.2) << endl;
     cout << "index of 15.5: " << dList.indexOf(15.5) << endl;
 }
 

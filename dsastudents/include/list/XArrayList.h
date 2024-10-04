@@ -269,7 +269,7 @@ template <class T>
 void XArrayList<T>::add(int index, T e)
 {
     // TODO
-    ensureCapacity(count);
+    ensureCapacity(index);
 
     // Shifting elements to right by 1 increment  until meeting index
     for(int i=count-1;i >= index;i--){
@@ -285,14 +285,22 @@ T XArrayList<T>::removeAt(int index)
 {
     // TODO
     checkIndex(index);
-
+    if(count == 0 || (index >= count)) throw std::out_of_range("Index is out of range!"); 
     T removedElement = this->data[index];
     // Shifting elements to the left
     // O(n) : worst case index =0 -> shift n-1 times
+    // T result = removedElement;
+    // if(deleteUserData != 0){ 
+    //   deleteUserData(removedElement);
+    //   count--;
+    //   return result;
+    // }
     for(int i = index; i< count-1; i++){
         this->data[i] = this->data[i+1];
     }
     // # elements decrease by 1
+    
+    
     this->count -= 1;
     return removedElement;
 }
@@ -303,12 +311,12 @@ bool XArrayList<T>::removeItem(T item, void (*removeItemData)(T))
     // TODO
     bool isFound = false;
     int it(0);
-    while(it != count){
+    while(it < count){
         // Check item's existance in data
         isFound = XArrayList<T>::equals(this->data[it], item, this->itemEqual); 
         if(isFound){
             // remove 
-            removeItemData(this->data[it]);
+            if(removeItemData != 0) removeItemData(this->data[it]);
             //Shift data
             for(int i=it ;i < count-1;i++){
                 this->data[i]  = this->data[i+1];
@@ -354,6 +362,7 @@ T &XArrayList<T>::get(int index)
 {
     // TODO
     checkIndex(index);
+    if(index == 0 && count ==0) throw std::out_of_range("Index is out of range!"); 
     return data[index];
 }
 
@@ -438,14 +447,17 @@ void XArrayList<T>::ensureCapacity(int index)
     //     throw std::out_of_range("Index is out of range!");
     // }
     checkIndex(index);
-    if(index >= capacity){
+    if(index > capacity){
         // Reallocate
         int oldCapacity = this->capacity;
         this->capacity = oldCapacity + (oldCapacity/2);
         try{
             // copy old elements in list to new list with higher capacity
             T* newData = new T[capacity];
-            memcpy(newData, data,oldCapacity*sizeof(T));
+            // memcpy(newData, data,oldCapacity*sizeof(T));
+            for(int i=0;i<count;i++){
+              newData[i] = data[i];
+            }
             delete[] data;
             data = newData;
         }catch(std::bad_alloc e){
